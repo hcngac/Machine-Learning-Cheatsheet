@@ -1,0 +1,258 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MatPlotLib and Random Cheat Sheet
+%
+% Edited by Michelle Cristina de Sousa Baltazar
+%
+% http://matplotlib.org/api/pyplot_summary.html
+% http://matplotlib.org/users/pyplot_tutorial.html
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+\usepackage[landscape]{geometry}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage{amsmath,amssymb}
+
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+
+\title{Machine Learning Cheat Sheet}
+\usepackage[brazilian]{babel}
+\usepackage[utf8]{inputenc}
+
+\advance\topmargin-.8in
+\advance\textheight3in
+\advance\textwidth3in
+\advance\oddsidemargin-1.5in
+\advance\evensidemargin-1.5in
+\parindent0pt
+\parskip2pt
+\newcommand{\hr}{\centerline{\rule{3.5in}{1pt}}}
+\begin{document}
+
+\begin{center}{\huge{\textbf{Machine Learning Cheat Sheet}}}\\
+{\large By Ben NG Hok Chun}
+\end{center}
+\begin{multicols*}{3}
+
+\tikzstyle{mybox} = [draw=black, fill=white, very thick,
+    rectangle, rounded corners, inner sep=10pt, inner ysep=10pt]
+\tikzstyle{fancytitle} =[fill=black, text=white, font=\bfseries]
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Expectation: $\mathop{\mathbb{E}}[x] = \int xp(x) dx$\\
+            Mean: $\mathop{\mathbb{E}}[\mathbf{x}]$\\
+            Variance: $\sigma^2 = \mathop{\mathbb{E}}[(x-\mu)^2]$\\
+            $\text{Cov}(\mathbf{x}) = \mathop{\mathbb{E}}[(\mathbf{x}-\mathbf{\mu})(\mathbf{x}-\mathbf{\mu})^T]$\\
+            Normal: $p(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp(-\frac{(x-\mu)^2}{2\sigma^2})$\\
+            Binomial: $p(x) = {n\choose k}p^k(1-p)^{n-k}$\\
+            Multinomial: $p(x) = \frac{n!}{x_1!\cdots x_k!}p_1^{x_1}\cdots p_k^{x_k}$\\
+            Poisson: $p(x) = \frac{\lambda^ke^{-\lambda}}{k!}$\\
+            Multivariate Normal: \\$p(x) = \det(2\pi\Sigma)^{-\frac{1}{2}}\exp(-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^T\Sigma^{-1}(\mathbf{x}-\mathbf{\mu}))$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Distributions};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            $\varsigma(x) = \frac{1}{1 + \exp(-x)}$ (Posterior class probability)\\ 
+            $\varsigma ' = \varsigma(1-\varsigma)$\\
+            Likelihood: $L(\theta | \mathcal{X}) = p(\mathcal{X} | \theta))$\\
+            Cross-entropy: $E(\theta | \mathcal{X}) = -\log L(\theta | \mathcal{X})$\\
+            $\sigma_i = \sigma(x_i) = \frac{\exp(x_i)}{\sum_j \exp(x_j)}$ (Posterior class probability)\\
+            $\frac{\partial\sigma_i}{x_i} = \sigma_i(1-\sigma_i)$\\
+            $\frac{\partial\sigma_i}{x_j} = -\sigma_i\sigma_j, i \neq j$\\
+            Lagrangian: $\mathcal{L} = a - \sum_l \alpha_lb_l, \alpha_l \geq 0 \quad\forall l$\\
+            for minimize $a$ subject to $b_l \geq 0 \quad\forall l$\\
+            Kernel: $K(a,b) = \phi(a)^T\phi(b)$\\
+            Polynomial kernel: $(a^Tb + 1)^q$\\
+            RBF kernel: $exp(-\frac{||a-b||^2}{2s^2})$ OR\\
+            $exp(-\frac{\mathcal{D}(a,b)}{2s^2})$ for some distance function $\mathcal{D}$
+            Sigmoidal kernel: $\tanh(2a^Tb+1)$\\
+            Leaky ReLU: $f(x) = \begin{cases}
+                x \text{ if } x \geq 0\\
+                \alpha \text{ else}
+            \end{cases}$\\
+            Exponantial linear: $f(x) = \begin{cases}
+                x \text{ if } x \geq 0\\
+                \alpha(e^x-1) \text{ else}
+            \end{cases}$\\
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Common Functions};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Expectation: $\mathcal{Q}(\Phi | \Phi^t) = \mathop{\mathbb{E}}[\mathcal{L}_C(\Phi | \mathcal{X}, \mathcal{Z}) | \mathcal{X},\Phi^t]$\\
+            Maximization: $\Phi^{t+1} = \arg\max_\Phi\mathcal{Q}(\Phi|\Phi^t)$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Expectation Maximization};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Xavier Initialization: (for sigmoid activation):\\
+            $\bullet$ Zero-mean normal with variance: $\frac{2}{n_{\text{in}}+n_{\text{out}}}$\\
+            $\bullet$ Uniform in $[-r,r]$ where $r=\sqrt{\frac{6}{n_{\text{in}}+n_{\text{out}}}}$\\
+            He Initialization: (for ReLUs activation):\\
+            $\bullet$ Zero-mean normal with variance: $\frac{4}{n_{\text{in}}+n_{\text{out}}}$\\
+            $\bullet$ Uniform in $[-r,r]$ where $r=\sqrt{\frac{12}{n_{\text{in}}+n_{\text{out}}}}$\\
+            Batch normalization: zero-center and normalize every layer.\\
+            Dropout: probabilistically set some hidden unit to 0.\\
+            Data augmentation: Translate, scale, shift, light/dim, flip to generate new data.\\
+            AdaGrad: \begin{align*}
+                s &\leftarrow s + \bigtriangledown_w L \circ \bigtriangledown_w L\\
+                w &\leftarrow w - \eta\bigtriangledown_wL\oslash\sqrt{s+\epsilon}
+            \end{align*}
+            RMSProp: \begin{align*}
+                s &\leftarrow \beta s + (1-\beta)\bigtriangledown_w L \circ \bigtriangledown_w L\\
+                w &\leftarrow w - \eta\bigtriangledown_wL\oslash\sqrt{s+\epsilon}
+            \end{align*}
+            Adam:\begin{align*}
+                \Delta w & \leftarrow \frac{\beta_1\Delta w -(1-\beta_1)\bigtriangledown_wL}{1-\beta_1^t}\\
+                s & \leftarrow \frac{\beta_2 s + (1-\beta_2)\bigtriangledown_w L \circ \bigtriangledown_w L}{1-\beta_2^t}\\
+                w & \leftarrow w - \eta\Delta w\oslash\sqrt{s+\epsilon}
+            \end{align*}
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Deep-learning Concepts};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            \begin{tabular}{ l | l || l | l}
+                $c$ & $0$ & $e^x$ & $e^x$\\
+                $x$ & $1$ & $a^x$ & $\ln(a)a^x$\\
+                $cx$ & $c$ & $\ln(x)$ & $\frac{1}{x}$\\
+                $x^n$ & $nx^{n-1}$ & $fg$ & $f'g \cdot fg'$ \\
+              \end{tabular}
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Derivative Rules};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            $\int u v dx = u\int vdx + \int u'(\int vdx)dx$\\
+            $\int f(g(x))g'(x)dx = \int f(u)du$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Integration Rules};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Histogram Estimator: \\
+                $\hat{p}(x) = \frac{\#\{x^{(l)}\text{ in the same bin as }x\}}{Nh}$\\
+            Naive Estimator: $\hat{p}(x) = \frac{\sum_lw(\frac{x-x^{(l)}}{h})}{Nh}$\\
+            where $w(u) = \begin{cases}
+                1 \text{ if } |u| < 1/2\\
+                0 \text{ else}
+            \end{cases}$\\
+            Kernel Estimator: $\hat{p}(x) = \frac{\sum_lK(\frac{x-x^{(l)}}{h})}{Nh}$\\
+            K-nearest neighbour:    $\hat{p}(x)=\frac{k}{2Nd_k(x)}$\\
+            where $d_k(x)$ is the distance of $x$ and k-th nearest neighbour of $x$\\
+            KNN-kernel: $\hat{p}(x) = \frac{\sum_lK(\frac{x-x^{(l)}}{d_k(x)})}{Nd_k(x)}$\\
+            Regressogram: Mean of the same bin\\
+            Running-mean smoother: Mean of the bin around x\\ 
+            Kernel smoother: $\hat{g}(x) = \frac{\sum_lK(\frac{x-x^{(l)}}{h})y^{(l)}}{\sum_lK(\frac{x-x^{(l)}}{h})}$\\
+            Running line smoother: With piecewise linear fit
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Nonparametric Methods};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Feature selection: Choose $k$ from $d$ features\\
+            Forward search v.s. Backward search\\
+            Feature extraction: Project $\mathbf{x}$ to $\mathcal{R}^k$\\
+            Principal Component Analysis:\\
+            Map $\mathbf{x}$ to $k$ orthogonal dimensions\\
+            $\mathbf{z}_n = \mathbf{w}_n^T\mathbf{x}, \text{Var}(\mathbf{z}_1) = \mathbf{w}_1^T\mathbf{\Sigma}\mathbf{w}_1, \mathbf{\Sigma} = \text{Cov}(x)$\\
+            Maximize $\text{Var}(\mathbf{z}_1)$ s.t. $||\mathbf{w}_1|| = 1$ is eigenvalue of $\mathbf{\Sigma}$\\
+            Factor Analysis:
+            Sample $\mathcal{X}$, $\mathop{\mathbb{E}}[\mathbf{x}]=\mathbf{\mu}$, $\text{Cov}(\mathbf{x}) = \mathbf{\Sigma}$\\
+            Factors $z_j$, $\mathop{\mathbb{E}}[z_j]=0$, $\text{Var}(z_j)=1$, $\text{Cov}(\mathbf{z}) = \mathbf{I}$\\
+            Noise $\epsilon_i$, $\mathop{\mathbb{E}}[\epsilon_i]=0$, $\text{Var}(\epsilon_i)=\Psi_i$, $\text{Cov}(\mathbf{\epsilon}) = \mathbf{\Psi I}$\\
+            $\mathbf{x} -\mathbf{\mu}=\mathbf{Vz+\epsilon} $, $\mathbf{\Sigma}=\mathbf{VV}^T + \mathbf{\Psi}$\\
+            Multidimensional Scaling: \\
+            $\mathbf{B = XX}^T = \mathbf{CDC}^T = (\mathbf{CD}^{1/2})(\mathbf{CD}^{1/2})^T$\\
+            where $\mathbf{C}$ is eigenvectors as columns and \\
+            $\mathbf{D}^{1/2}$ is diagonal matrix of square root of eigenvalues\\
+            Drop eigenvectors with low eigenvalues in $\mathbf{C}$ and $\mathbf{D}$\\
+            Linear Discriminant Analysis:\\
+            Between-class scatter: $\mathbf{w}^T\mathbf{S}_B\mathbf{w}$,\\
+            $\mathbf{S}_b = (\mathbf{m}_1 - \mathbf{m}_2)(\mathbf{m}_1 - \mathbf{m}_2)^T \text{,} \sum_iN_i(\mathbf{m}_i - \mathbf{m})(\mathbf{m}i - \mathbf{m})^T$
+            Within-class scatter: $\mathbf{w}^T\mathbf{S}_W\mathbf{w}$,\\
+            $\mathbf{S}_W = \sum_i\mathbf{S}_i, \mathbf{S}_i = \sum_ly_i^{(l)}(x^{(l)}-\mathbf{m}_i)(x^{(l)}-\mathbf{m}_i)^T$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Dimensionality Reduction};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            No-free-lunch theory: No single model is the best\\
+            Combine several simple models into group\\
+            Voting: Convex combination of base learners\\
+            $y = f(d_1,\cdots,d_L|\mathbf{\Phi})=\sum_{j=1}^Lw_jd_j$\\
+            Other voting rules: Weighted sum, median, min, max, product\\
+            Mixture of experts, Gating: $y=\sum_{j=1}^Lw_j(x)d_j$\\
+            Bayesian model combination: \\
+            $P(C_i|x) = \sum_{\mathcal{M}_j}P(C_i|x,\mathcal{M}_j)P(\mathcal{M}_j)$, \\
+            $w_j$ estimates prior model probability $P(\mathcal{M}_j)$\\
+            Bagging, Bootstrap aggregating: Base learners trained on slightly different training sets.\\
+            Draw $N$ from $\mathcal{X}$ with replacement\\
+            Boosting: Combine weak learner into strong learner\\
+            AdaBoost: Make wrongly-labeled data have higher weight in next learner's training set
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Ensemble Learning};
+\end{tikzpicture}
+
+
+
+\end{multicols*}
+\end{document}
+Contact GitHub API Training Shop Blog About
+© 2016 GitHub, Inc. Terms Privacy Security Status Help
