@@ -268,6 +268,22 @@
 \begin{tikzpicture}
     \node [mybox] (box){
         \begin{minipage}{0.3\textwidth}
+            Overfitting\\
+            Underfitting\\
+            Explanability\\
+            Hardware limitation\\
+            Time limitation\\
+            Space/Time complexity of learning algorithm
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Problems with Machine Learning};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
             Given a non-negative matrix $\mathbf{V}$, find $\mathbf{V}\approx \mathbf{WH}$
             Cost functions (Lower bound $=0$ iff $\mathbf{A=B}$):\\
             $\bullet$ Euclidean distance (Frobenius norm): \\
@@ -275,11 +291,90 @@
             $\bullet$ Kullback-Leibler divergence:\\
             $D(\mathbf{A}||\mathbf{B}) = \sum_{ij}(A_{ij}\log\frac{A_{ij}}{B_{ij}}-A_{ij}+B_{ij})$\\
             Optimization: convex w.r.t. to $\mathbf{W}$ or $\mathbf{H}$ separately, not both\\
-            
+            Multiplicative update rules:\\
+            For Euclidean distance:\\
+            $H_{a\mu}\leftarrow H_{a\mu}\frac{(\mathbf{W}^T\mathbf{V})_{a\mu}}{(\mathbf{W}^T\mathbf{WH})_{a\mu}}$, 
+            $W_{ia}\leftarrow W_{ia}\frac{(\mathbf{VH}^T)_{ia}}{(\mathbf{WHH}^T)_{ia}}$, \\
+            For KL-divergence:\\
+            $H_{a\mu}\leftarrow H_{a\mu}\frac{\sum_iW_{ia}V_{i\mu}/(\mathbf{WH})_{i\mu}}{\sum_kW_{ka}}$, \\
+            $W_{ia}\leftarrow W_{ia}\frac{\sum_\mu H_{a\mu}V_{i\mu}/(\mathbf{WH})_{i\mu}}{\sum_vH_{av}}$, \\
+            Probabiistic Matrix Factorization:\\
+            $p(R_{ij}|\mathbf{U}_i,\mathbf{V}_j,\sigma^2)=\mathcal{N}(R_{ij}|\mathbf{U}_i^T\mathbf{V}_j,\sigma^2)$\\
+            $p(\mathbf{U}_i|\sigma_U^2) = \mathcal{N}(\mathbf{U}_i|0,\sigma_U^2\mathbf{I})$\\
+            $p(\mathbf{V}_j|\sigma_V^2) = \mathcal{N}(\mathbf{V}_j|0,\sigma_V^2\mathbf{I})$\\
+            MAP estimation with quadratic regularization terms:
+            \begin{align*}
+                E =& \frac{1}{2} \sum_i\sum_jI_{ij}(R_{ij}-\mathbf{U}_i^T\mathbf{V}_j)^2 \\
+                &+\frac{\lambda_U}{2} \sum_i || \mathbf{U}_i ||^2 +\frac{\lambda_V}{2}\sum_j||\mathbf{V}_i||^2
+            \end{align*}
+            where $\lambda_X = \sigma^2/\sigma_X^2$\\
+            Variation: $p(R_{ij}|\mathbf{U}_i,\mathbf{V}_j,\sigma^2)=\mathcal{N}(R_{ij}|\varsigma(\mathbf{U}_i^T\mathbf{V}_j),\sigma^2)$
         \end{minipage}
     };
     
     \node[fancytitle, right=10pt] at (box.north west) {Matrix Factorization};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            States: $S = \{S_1,S_2,\cdots,S_N\}$\\
+            Observation: $V = \{v_1,v_2,\cdots,v_M\}$\\
+            State transition probabilities:\\
+            $\mathbf{A} = [a_{ij}]$ where $a_{ij}\equiv P(q_{t+1}=S_j|q_t=S_i)$\\
+            Observation probabilities:\\
+            $\mathbf{B} = [b_j(m)]$ where $b_j(m)\equiv P(O_t=v_m|q_t=S_j)$\\
+            Initial state probabilities: \\
+            $\pi = [\pi_i]$ where $\pi_i\equiv P(q_1=S_i)$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Hidden Markov Model Definition};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Model parameter: $\lambda = (\mathbf{A},\mathbf{B},\pi)$\\
+            Forward variables:
+            \begin{align*}
+                \alpha_t(i) &\equiv P(O_1,\cdots,O_t,q_t=S_i|\lambda)\\
+                \alpha_i(i) &\equiv P(O_1,q_1=S_i|\lambda) = \pi_ib_i(O_1)\\
+                \alpha_{t+1}(i) &= [\sum_i\alpha_t(i)a_{ij}]b_j(O_t+1)\\
+                P(O|\lambda) &= \sum_i\alpha_T(i) \text{ time } O(N^2T)
+            \end{align*}
+            Backward variables:
+            \begin{align*}
+                \beta_t(i) &\equiv P(O_t+1,\cdots,O_T|q_t=S_i,\lambda)\\
+                \beta_T(i) &=1\\
+                \beta_t(i) &= \sum_ja_{ij}b_j(O_{t+1})\beta_{t+1}(j)\\
+                P(O|\lambda) &= \sum_i\beta_1(i)\pi_ib_i(O_1)
+            \end{align*}
+            Finding states: Viterbi Algorithm:
+            \begin{align*}
+                \delta_1(i)&=\pi_ib_i(O_1)\\
+                \psi_i(i) &= 0\\
+                \delta_t(j)&=(\max_i\delta_{t-1}(i)a_{ij})\cdot b_j(O_t)\\
+                \psi_t(j)&=\arg\max_i\delta_{t-1}(i)a_{ij}\\
+                p^* &= \max_i\delta_T(i)\\
+                q_T^* &= \arg\max_i\delta_T(i)\\
+                q_t^* &= \psi_{t+1}(q^*_{t+1}), t=T-1,\cdots,1
+            \end{align*}
+            Learn model parameter: Baum-Welch algorithm:
+            \begin{align*}
+                \zeta_t(i,j)&\equiv P(q_t=S_i,q_{t+1}=S_j|O,\lambda)\\
+                &= \frac{\alpha_t(i)a_{ij}b_j(O_{t+1})\beta_{t+1}(j)}{\sum_k\sum_l\alpha_t(k)a_{kl}b_l(O_{t+1})\beta_{t+1}(l)}\\
+                \mathop{\mathbb{E}}[z_i^t] &= \gamma_t(i),\quad \mathop{\mathbb{E}}[z_{ij}^t]=\zeta_t(i,j)\\
+                \hat{a}_{ij}&= \frac{\sum_{k=1}^K\sum_{t=1}^{T_k-1}\zeta_t^k(i,j)}{\sum_{k=1}^K\sum_{t=1}^{T_k-1}\gamma_t^k(i)}\\
+                \hat{b}_{j}(m)&= \frac{\sum_{k=1}^K\sum_{t=1}^{T_k}\gamma_t^k(j)\mathbf{1}(O_t^{(k)}=v_m)}{\sum_{k=1}^K\sum_{t=1}^{T_k}\gamma_t^k(j)}\\
+                \hat{\pi}_i &= \frac{\sum_{k=1}^K\gamma_1^k(i)}{K}
+            \end{align*}
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Hidden Markov Model Algorithms};
 \end{tikzpicture}
 
 
