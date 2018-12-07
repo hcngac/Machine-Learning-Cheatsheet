@@ -251,6 +251,40 @@
 \end{tikzpicture}
 
 
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Lasso Regression (L1 Regularization):\\
+            $\bullet \text{ Cost: } \lambda\sum_i|w_i|$\\
+            Ridge Regression (L2 Regularization):\\
+            $\bullet \text{ Cost: } \lambda\sum_iw_i^2$
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Regularization};
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+    \node [mybox] (box){
+        \begin{minipage}{0.3\textwidth}
+            Given a non-negative matrix $\mathbf{V}$, find $\mathbf{V}\approx \mathbf{WH}$
+            Cost functions (Lower bound $=0$ iff $\mathbf{A=B}$):\\
+            $\bullet$ Euclidean distance (Frobenius norm): \\
+            $||\mathbf{A}-\mathbf{B}||^2_F = \sum_{ij}(A_{ij}-B_{ij})^2$\\
+            $\bullet$ Kullback-Leibler divergence:\\
+            $D(\mathbf{A}||\mathbf{B}) = \sum_{ij}(A_{ij}\log\frac{A_{ij}}{B_{ij}}-A_{ij}+B_{ij})$\\
+            Optimization: convex w.r.t. to $\mathbf{W}$ or $\mathbf{H}$ separately, not both\\
+            
+        \end{minipage}
+    };
+    
+    \node[fancytitle, right=10pt] at (box.north west) {Matrix Factorization};
+\end{tikzpicture}
+
+
+
+
 
 \end{multicols*}
 \end{document}
